@@ -1,0 +1,216 @@
+// IMPLEMENTATION OF BINARY SEARCH
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int binarySearch(vector<int>& arr, int target) {
+    int l = 0;
+    int r = arr.size() - 1;
+
+    while (l <= r) {
+        int mid = l + (r - l) / 2;
+
+        if (arr[mid] == target) {
+            return mid; // Target found, return the index
+        } else if (arr[mid] < target) {
+            l = mid + 1; // Target is in the right half
+        } else {
+            r = mid - 1; // Target is in the left half
+        }
+    }
+
+    return -1; // Target not found
+}
+
+int main() {
+    vector<int> arr = {1, 3, 5, 7, 9, 11, 13, 15};
+    int target;
+    cin>>target;
+
+    int result = binarySearch(arr, target);
+
+    if (result != -1) {
+        cout << "Target " << target << " found at index " << result << endl;
+    } else {
+        cout << "Target not found in the array." << endl;
+    }
+
+    return 0;
+}
+*******************************************************************************************************************************
+
+// IMPLEMENTATION OF BINARY HEAP
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+class MinHeap {
+private:
+    vector<int> heap;
+
+    void heapifyUp(int idx) {
+        int p = (idx - 1) / 2;
+        while (idx > 0 && heap[idx] < heap[p]) {
+            swap(heap[idx], heap[p]);
+            idx = p;
+            p = (idx - 1) / 2;
+        }
+    }
+
+    void heapifyDown(int idx) {
+        int n = heap.size();
+        while (true) {
+            int leftChild = 2 * idx + 1;
+            int rightChild = 2 * idx + 2;
+            int smallest = idx;
+
+            if (leftChild < n && heap[leftChild] < heap[smallest]) {
+                smallest = leftChild;
+            }
+
+            if (rightChild < n && heap[rightChild] < heap[smallest]) {
+                smallest = rightChild;
+            }
+
+            if (smallest != idx) {
+                swap(heap[idx], heap[smallest]);
+                idx = smallest;
+            } else {
+                break;
+            }
+        }
+    }
+
+public:
+    MinHeap() {}
+
+    void insert(int value) {
+        heap.push_back(value);
+        heapifyUp(heap.size() - 1);
+    }
+
+    void pop() {
+        if (heap.empty()) {
+            return;
+        }
+
+        swap(heap[0], heap[heap.size() - 1]);
+        heap.pop_back();
+        heapifyDown(0);
+    }
+
+    int top() {
+        if (heap.empty()) {
+            return -1; 
+        }
+        return heap[0];
+    }
+
+    bool empty() {
+        return heap.empty();
+    }
+
+    int size() {
+        return heap.size();
+    }
+};
+
+int main() {
+    MinHeap minHeap;
+
+    minHeap.insert(1);
+    minHeap.insert(4);
+    minHeap.insert(2);
+    minHeap.insert(8);
+    minHeap.insert(9);
+
+    cout << "Min Heap: ";
+    while (!minHeap.empty()) {
+        cout << minHeap.top() << " ";
+        minHeap.pop();
+    }
+
+    return 0;
+}
+******************************************************************************************************************************
+// IMPLEMENTATION OF BINARY TREE
+
+#include <iostream>
+
+using namespace std;
+
+struct TreeNode {
+    int data;
+    TreeNode* left;
+    TreeNode* right;
+
+    TreeNode(int value) : data(value), left(nullptr), right(nullptr) {}
+};
+
+// Function to insert a value 
+void insert(TreeNode*& root, int value) {
+    if (root == nullptr) {
+        root = new TreeNode(value);
+        return;
+    }
+
+    if (value < root->data) {
+        insert(root->left, value);
+    } else {
+        insert(root->right, value);
+    }
+}
+
+// Function to search for a value
+bool search(TreeNode* root, int value) {
+    if (root == nullptr) {
+        return false;
+    }
+
+    if (root->val == value) {
+        return true;
+    } else if (value < root->data) {
+        return search(root->left, value);
+    } else {
+        return search(root->right, value);
+    }
+}
+
+// Function to traverse the binary tree in-order (left-root-right)
+void inorderTraversal(TreeNode* root) {
+    if (root == nullptr) {
+        return;
+    }
+
+    inorderTraversal(root->left);
+    cout << root->data << " ";
+    inorderTraversal(root->right);
+}
+
+int main() {
+    TreeNode* root = nullptr;
+
+    insert(root, 12);
+    insert(root, 32);
+    insert(root, 11);
+    insert(root, 5);
+    insert(root, 7);
+
+    cout << "In-order Traversal: ";
+    inorderTraversal(root);
+    cout << endl;
+
+    int searchValue;
+    cin>>searchValue;
+    if (search(root, searchValue)) {
+        cout << "Value " << searchValue << " found in the binary tree." << endl;
+    } else {
+        cout << "Value " << searchValue << " not found in the binary tree." << endl;
+    }
+
+    return 0;
+}
