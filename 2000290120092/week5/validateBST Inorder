@@ -1,0 +1,419 @@
+VALIDATE BST
+
+#include <bits/stdc++.h>
+using namespace std;
+
+/* A binary tree node has data, pointer to left child
+and a pointer to right child */
+struct node {
+	int data;
+	struct node* left;
+	struct node* right;
+};
+
+/* Helper function that allocates a new node with the
+given data and NULL left and right pointers. */
+struct node* newNode(int data)
+{
+	struct node* node
+		= (struct node*)malloc(sizeof(struct node));
+	node->data = data;
+	node->left = NULL;
+	node->right = NULL;
+
+	return (node);
+}
+
+int maxValue(struct node* node)
+{
+	if (node == NULL) {
+		return INT16_MIN;
+	}
+	int value = node->data;
+	int leftMax = maxValue(node->left);
+	int rightMax = maxValue(node->right);
+
+	return max(value, max(leftMax, rightMax));
+}
+
+int minValue(struct node* node)
+{
+	if (node == NULL) {
+		return INT16_MAX;
+	}
+	int value = node->data;
+	int leftMax = minValue(node->left);
+	int rightMax = minValue(node->right);
+
+	return min(value, min(leftMax, rightMax));
+}
+
+/* Returns true if a binary tree is a binary search tree */
+int isBST(struct node* node)
+{
+	if (node == NULL)
+		return 1;
+
+	/* false if the max of the left is > than us */
+	if (node->left != NULL
+		&& maxValue(node->left) > node->data)
+		return 0;
+
+	/* false if the min of the right is <= than us */
+	if (node->right != NULL
+		&& minValue(node->right) < node->data)
+		return 0;
+
+	/* false if, recursively, the left or right is not a BST
+	*/
+	if (!isBST(node->left) || !isBST(node->right))
+		return 0;
+
+	/* passing all that, it's a BST */
+	return 1;
+}
+
+/* Driver code*/
+int main()
+{
+	struct node* root = newNode(4);
+	root->left = newNode(2);
+	root->right = newNode(5);
+	// root->right->left = newNode(7);
+	root->left->left = newNode(1);
+	root->left->right = newNode(3);
+
+	// Function call
+	if (isBST(root))
+		printf("Is BST");
+	else
+		printf("Not a BST");
+
+	return 0;
+}
+
+IN ORDER
+
+// C++ code to implement the approach
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Class describing a node of tree
+class Node {
+public:
+	int data;
+	Node* left;
+	Node* right;
+	Node(int v)
+	{
+		this->data = v;
+		this->left = this->right = NULL;
+	}
+};
+
+// Inorder Traversal
+void printInorder(Node* node)
+{
+	if (node == NULL)
+		return;
+
+	// Traverse left subtree
+	printInorder(node->left);
+
+	// Visit node
+	cout << node->data << " ";
+
+	// Traverse right subtree
+	printInorder(node->right);
+}
+
+// Driver code
+int main()
+{
+	// Build the tree
+	Node* root = new Node(100);
+	root->left = new Node(20);
+	root->right = new Node(200);
+	root->left->left = new Node(10);
+	root->left->right = new Node(30);
+	root->right->left = new Node(150);
+	root->right->right = new Node(300);
+
+	// Function call
+	cout << "Inorder Traversal: ";
+	printInorder(root);
+	return 0;
+}
+
+PRE ORDER
+
+// C++ code to implement the approach
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Class describing a node of tree
+class Node {
+public:
+	int data;
+	Node* left;
+	Node* right;
+	Node(int v)
+	{
+		this->data = v;
+		this->left = this->right = NULL;
+	}
+};
+
+// Preorder Traversal
+void printPreOrder(Node* node)
+{
+	if (node == NULL)
+		return;
+
+	// Visit Node
+	cout << node->data << " ";
+
+	// Traverse left subtree
+	printPreOrder(node->left);
+
+	// Traverse right subtree
+	printPreOrder(node->right);
+}
+
+// Driver code
+int main()
+{
+	// Build the tree
+	Node* root = new Node(100);
+	root->left = new Node(20);
+	root->right = new Node(200);
+	root->left->left = new Node(10);
+	root->left->right = new Node(30);
+	root->right->left = new Node(150);
+	root->right->right = new Node(300);
+
+	// Function call
+	cout << "Preorder Traversal: ";
+	printPreOrder(root);
+	return 0;
+}
+
+POST ORDER
+
+// C++ code to implement the approach
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Class to define structure of a node
+class Node {
+public:
+	int data;
+	Node* left;
+	Node* right;
+	Node(int v)
+	{
+		this->data = v;
+		this->left = this->right = NULL;
+	}
+};
+
+// PostOrder Traversal
+void printPostOrder(Node* node)
+{
+	if (node == NULL)
+		return;
+
+	// Traverse left subtree
+	printPostOrder(node->left);
+
+	// Traverse right subtree
+	printPostOrder(node->right);
+
+	// Visit node
+	cout << node->data << " ";
+}
+
+// Driver code
+int main()
+{
+	Node* root = new Node(100);
+	root->left = new Node(20);
+	root->right = new Node(200);
+	root->left->left = new Node(10);
+	root->left->right = new Node(30);
+	root->right->left = new Node(150);
+	root->right->right = new Node(300);
+
+	// Function call
+	cout << "PostOrder Traversal: ";
+	printPostOrder(root);
+	cout << "\n";
+
+	return 0;
+}
+
+LEVEL ORDER/BFS
+
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_VERTICES 50
+
+// This struct represents a directed graph using
+// adjacency list representation
+typedef struct Graph_t {
+
+	// No. of vertices
+	int V;
+	bool adj[MAX_VERTICES][MAX_VERTICES];
+} Graph;
+
+// Constructor
+Graph* Graph_create(int V)
+{
+	Graph* g = malloc(sizeof(Graph));
+	g->V = V;
+
+	for (int i = 0; i < V; i++) {
+		for (int j = 0; j < V; j++) {
+			g->adj[i][j] = false;
+		}
+	}
+
+	return g;
+}
+
+// Destructor
+void Graph_destroy(Graph* g) { free(g); }
+
+// Function to add an edge to graph
+void Graph_addEdge(Graph* g, int v, int w)
+{
+	// Add w to v’s list.
+	g->adj[v][w] = true;
+}
+
+// Prints BFS traversal from a given source s
+void Graph_BFS(Graph* g, int s)
+{
+	// Mark all the vertices as not visited
+	bool visited[MAX_VERTICES];
+	for (int i = 0; i < g->V; i++) {
+		visited[i] = false;
+	}
+
+	// Create a queue for BFS
+	int queue[MAX_VERTICES];
+	int front = 0, rear = 0;
+
+	// Mark the current node as visited and enqueue it
+	visited[s] = true;
+	queue[rear++] = s;
+
+	while (front != rear) {
+
+		// Dequeue a vertex from queue and print it
+		s = queue[front++];
+		printf("%d ", s);
+
+		// Get all adjacent vertices of the dequeued
+		// vertex s.
+		// If an adjacent has not been visited,
+		// then mark it visited and enqueue it
+		for (int adjacent = 0; adjacent < g->V;
+			adjacent++) {
+			if (g->adj[s][adjacent] && !visited[adjacent]) {
+				visited[adjacent] = true;
+				queue[rear++] = adjacent;
+			}
+		}
+	}
+}
+
+// Driver code
+int main()
+{
+	// Create a graph
+	Graph* g = Graph_create(4);
+	Graph_addEdge(g, 0, 1);
+	Graph_addEdge(g, 0, 2);
+	Graph_addEdge(g, 1, 2);
+	Graph_addEdge(g, 2, 0);
+	Graph_addEdge(g, 2, 3);
+	Graph_addEdge(g, 3, 3);
+
+	printf("Following is Breadth First Traversal "
+		"(starting from vertex 2) \n");
+	Graph_BFS(g, 2);
+	Graph_destroy(g);
+
+	return 0;
+}
+
+DFS
+
+// C++ program to print DFS traversal from
+// a given vertex in a given graph
+#include <bits/stdc++.h>
+using namespace std;
+
+// Graph class represents a directed graph
+// using adjacency list representation
+class Graph {
+public:
+	map<int, bool> visited;
+	map<int, list<int> > adj;
+
+	// Function to add an edge to graph
+	void addEdge(int v, int w);
+
+	// DFS traversal of the vertices
+	// reachable from v
+	void DFS(int v);
+};
+
+void Graph::addEdge(int v, int w)
+{
+	// Add w to v’s list.
+	adj[v].push_back(w);
+}
+
+void Graph::DFS(int v)
+{
+	// Mark the current node as visited and
+	// print it
+	visited[v] = true;
+	cout << v << " ";
+
+	// Recur for all the vertices adjacent
+	// to this vertex
+	list<int>::iterator i;
+	for (i = adj[v].begin(); i != adj[v].end(); ++i)
+		if (!visited[*i])
+			DFS(*i);
+}
+
+// Driver code
+int main()
+{
+	// Create a graph given in the above diagram
+	Graph g;
+	g.addEdge(0, 1);
+	g.addEdge(0, 2);
+	g.addEdge(1, 2);
+	g.addEdge(2, 0);
+	g.addEdge(2, 3);
+	g.addEdge(3, 3);
+
+	cout << "Following is Depth First Traversal"
+			" (starting from vertex 2) \n";
+
+	// Function call
+	g.DFS(2);
+
+	return 0;
+}
